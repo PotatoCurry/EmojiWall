@@ -15,9 +15,11 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
         System.out.print("Picture File: ");
-        String pictureFile = input.nextLine();
+        String pictureFileName = input.nextLine();
+        File pictureFile = new File(pictureFileName);
+        String pictureName = pictureFile.getName().replaceFirst("[.][^.]+$", "");
         try {
-            picture = ImageIO.read(new File(pictureFile));
+            picture = ImageIO.read(pictureFile);
         } catch (IOException e) {
             System.out.println("Error - File not found");
             e.printStackTrace();
@@ -35,9 +37,8 @@ public class Main {
         for (int r = 0; r < emojis.length; r++)
             for (int c = 0; c < emojis[r].length; c++)
                 emojis[c][r] = picture.getSubimage(actualLength * r, actualLength * c, actualLength, actualLength);
-        
-        boolean success = (new File(pictureFile.replaceFirst("[.][^.]+$", "") + "/pictureFile")).mkdirs();
-        if (!(new File(pictureFile.replaceFirst("[.][^.]+$", "") + "/pictureFile")).mkdirs()) {
+
+        if (!(new File(pictureName + "/")).mkdirs()) {
             System.out.println("Error - Directory creation failed");
             System.exit(0);
         }
@@ -45,8 +46,7 @@ public class Main {
         for (int r = 0; r < emojis.length; r++) {
             for (int c = 0; c < emojis[r].length; c++) {
                 try {
-                    File outputFile = new File(pictureFile.replaceFirst("[.][^.]+$", "") + "[" + (r + 1) + "]" + "[" + (c + 1) + "]" + ".png");
-                    ImageIO.write(emojis[r][c], "png", outputFile);
+                    ImageIO.write(emojis[r][c], "png", new File(pictureName + "/" + pictureName + "[" + (r + 1) + "]" + "[" + (c + 1) + "]" + ".png"));
                 } catch (IOException e) {
                     System.out.println("Error - Unable to write file");
                     e.printStackTrace();
@@ -54,7 +54,7 @@ public class Main {
             }
         }
 
-        System.out.println("Emojis output in format " + pictureFile.replaceFirst("[.][^.]+$", "") + "[row][column].png");
+        System.out.println("Emojis output in format " + pictureName + "/" + pictureName + "[row][column].png");
     }
 
 }
