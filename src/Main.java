@@ -27,7 +27,7 @@ public class Main {
             System.exit(0);
         }
 
-        //TODO: Add support for non-square imgaes and walls
+        //TODO: Add support for non-square images and walls
         System.out.print("Side Length: ");
         int emojiLength = input.nextInt();
         int actualLength = picture.getWidth() / emojiLength;
@@ -35,12 +35,12 @@ public class Main {
         for (int r = 0; r < emojis.length; r++)
             for (int c = 0; c < emojis[r].length; c++)
                 emojis[c][r] = picture.getSubimage(actualLength * r, actualLength * c, actualLength, actualLength);
-        //output image
-        //create folder
-//        boolean success = (new File("potentially/outputFile")).mkdirs();
-//        if (!success) {
-//            System.out.println();
-//        }
+        
+        boolean success = (new File(pictureFile.replaceFirst("[.][^.]+$", "") + "/pictureFile")).mkdirs();
+        if (!(new File(pictureFile.replaceFirst("[.][^.]+$", "") + "/pictureFile")).mkdirs()) {
+            System.out.println("Error - Directory creation failed");
+            System.exit(0);
+        }
 
         for (int r = 0; r < emojis.length; r++) {
             for (int c = 0; c < emojis[r].length; c++) {
