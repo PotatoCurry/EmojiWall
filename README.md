@@ -1,5 +1,6 @@
 # EmojiWall
-[![Build Status](https://travis-ci.com/PotatoCurry/EmojiWall.svg?branch=master)](https://travis-ci.com/PotatoCurry/EmojiWall)
+![Build Status](https://img.shields.io/travis/com/PotatoCurry/EmojiWall.svg)
+![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg)
 
 EmojiWall is used to turn pictures into matrices of emojis.
 It is intended for platforms like Discord where users are able to upload custom emojis and control their spacing.
