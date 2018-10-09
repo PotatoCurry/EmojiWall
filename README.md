@@ -1,7 +1,6 @@
 # EmojiWall
 ![Build Status](https://img.shields.io/travis/com/PotatoCurry/EmojiWall.svg)
 ![Open Issues](https://img.shields.io/github/issues/PotatoCurry/EmojiWall.svg)
-![Pull Requests](https://img.shields.io/github/issues-pr/PotatoCurry/EmojiWall.svg)
 ![Latest Release](https://img.shields.io/github/release/PotatoCurry/EmojiWall.svg)
 ![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg)
 
