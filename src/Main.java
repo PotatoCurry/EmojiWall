@@ -21,11 +21,11 @@ public class Main {
         try {
             picture = ImageIO.read(pictureFile);
         } catch (IOException e) {
-            System.out.println("Error - File not found");
-            e.printStackTrace();
+            System.err.println("Error - File not found");
+            System.exit(0);
         }
         if (picture.getWidth() != picture.getHeight()) {
-            System.out.println("Error - Picture is not a square");
+            System.err.println("Error - Picture is not a square");
             System.exit(0);
         }
 
@@ -39,7 +39,7 @@ public class Main {
                 emojis[c][r] = picture.getSubimage(actualLength * r, actualLength * c, actualLength, actualLength);
 
         if (!(new File(pictureName + "/")).mkdirs()) {
-            System.out.println("Error - Directory creation failed");
+            System.err.println("Error - Directory creation failed");
             System.exit(0);
         }
 
@@ -48,8 +48,8 @@ public class Main {
                 try {
                     ImageIO.write(emojis[r][c], "png", new File(pictureName + "/" + pictureName + "[" + (r + 1) + "]" + "[" + (c + 1) + "]" + ".png"));
                 } catch (IOException e) {
-                    System.out.println("Error - Unable to write file");
-                    e.printStackTrace();
+                    System.err.println("Error - Unable to write file");
+                    System.exit(0);
                 }
             }
         }
