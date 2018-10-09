@@ -1,4 +1,5 @@
 ![EmojiWall](EmojiWall.png)
+
 ![Build Status](https://img.shields.io/travis/com/PotatoCurry/EmojiWall.svg)
 ![Open Issues](https://img.shields.io/github/issues/PotatoCurry/EmojiWall.svg)
 ![Latest Release](https://img.shields.io/github/release/PotatoCurry/EmojiWall.svg)
