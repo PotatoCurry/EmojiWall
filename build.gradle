@@ -1,3 +1,19 @@
 apply plugin: "java"
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}
+
+task BuildJar {
+    jar {
+        manifest {
+            attributes 'Main-Class': "Main"
+        }
+    }
+}
+
 sourceCompatibility = 1.8

@@ -2,59 +2,70 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Main {
 
-    private static BufferedImage picture;
-    private static BufferedImage[][] emojis;
+    private static final String OUTPUT_TEMPLATE = "%1$s_%2$s_%3$s.png";
 
-    //TODO: Add ability to use args
-    public static void main(String[] args) {
-        System.out.println("EmojiWall by PotatoCurry");
-
-        Scanner input = new Scanner(System.in);
-        System.out.print("Picture File: ");
-        String pictureFileName = input.nextLine();
-        File pictureFile = new File(pictureFileName);
-        String pictureName = pictureFile.getName().replaceFirst("[.][^.]+$", "");
+    private static BufferedImage readImage(String path) {
+        BufferedImage image = null;
         try {
-            picture = ImageIO.read(pictureFile);
+            File input = new File(path);
+            image = ImageIO.read(input);
         } catch (IOException e) {
-            System.out.println("Error - File not found");
-            e.printStackTrace();
-        }
-        if (picture.getWidth() != picture.getHeight()) {
-            System.out.println("Error - Picture is not a square");
+            System.out.println("Error reading file.");
             System.exit(0);
         }
-
-        //TODO: Add support for non-square images and walls
-        System.out.print("Side Length: ");
-        int emojiLength = input.nextInt();
-        int actualLength = picture.getWidth() / emojiLength;
-        emojis = new BufferedImage[emojiLength][emojiLength];
-        for (int r = 0; r < emojis.length; r++)
-            for (int c = 0; c < emojis[r].length; c++)
-                emojis[c][r] = picture.getSubimage(actualLength * r, actualLength * c, actualLength, actualLength);
-
-        if (!(new File(pictureName + "/")).mkdirs()) {
-            System.out.println("Error - Directory creation failed");
-            System.exit(0);
-        }
-
-        for (int r = 0; r < emojis.length; r++) {
-            for (int c = 0; c < emojis[r].length; c++) {
-                try {
-                    ImageIO.write(emojis[r][c], "png", new File(pictureName + "/" + pictureName + "[" + (r + 1) + "]" + "[" + (c + 1) + "]" + ".png"));
-                } catch (IOException e) {
-                    System.out.println("Error - Unable to write file");
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        System.out.println("Emojis output in format " + pictureName + "/" + pictureName + "[row][column].png");
+        return image;
     }
 
+    private static void verifyArgs(String... args) {
+        boolean lenCheck = args.length == 2;
+        boolean existCheck = new File(args[0]).isFile();
+        boolean sizeCheck = args[1].matches("[-]?[0-9]*");
+        if (lenCheck && existCheck && sizeCheck) return;
+        if (!lenCheck)
+            System.out.println("Usage: ./EmojiWall.jar <file_path> <grid_len>");
+        if (!existCheck)
+            System.out.println("Invalid file path.");
+        if (!sizeCheck)
+            System.out.println("Invalid grid size.");
+        System.exit(0);
+    }
+
+    private static BufferedImage centerImage(BufferedImage image, int gridSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int centerSize = ((Math.max(width, height) / gridSize) + 2) * gridSize;
+        int centerX = (centerSize - width) >> 1;
+        int centerY = (centerSize - height) >> 1;
+        BufferedImage centeredImage = new BufferedImage(centerSize, centerSize, BufferedImage.TYPE_INT_ARGB_PRE);
+        centeredImage.createGraphics().drawImage(image, centerX, centerY, null);
+        return centeredImage;
+    }
+
+    private static void writeImages(BufferedImage image, String imageName, int gridSize) {
+        int rowLen = image.getWidth() / gridSize;
+        int colLen = image.getHeight() / gridSize;
+        for (int n = 0, row = 0, col = 0; n <= Math.pow(gridSize, 2); row = n / gridSize, col = n % gridSize, n++) {
+            BufferedImage output = image.getSubimage(row * rowLen, col * colLen, rowLen, colLen);
+            File outputFile = new File(String.format(OUTPUT_TEMPLATE, imageName, col, row));
+            try {
+                ImageIO.write(output, "png", outputFile);
+            } catch (IOException e) {
+                System.out.printf("Unable to write file: %1$s\n", outputFile);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        verifyArgs(args);
+        BufferedImage image = readImage(args[0]);
+        int gridSize = Integer.parseInt(args[1]);
+        String imageName = args[0].replaceAll("([.]+[\\w]*)", "");
+        if (image.getWidth() % gridSize <= 0 && image.getHeight() % gridSize <= 0)
+            image = centerImage(image, gridSize);
+        writeImages(image, imageName, gridSize);
+        System.out.println("Finished splitting image.");
+    }
 }
