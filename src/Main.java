@@ -13,7 +13,7 @@ public class Main {
             File input = new File(path);
             image = ImageIO.read(input);
         } catch (IOException e) {
-            System.out.println("Error reading file.");
+            System.err.println("Error reading file.");
             System.exit(0);
         }
         return image;
@@ -25,11 +25,11 @@ public class Main {
         boolean sizeCheck = args[1].matches("[-]?[0-9]*");
         if (lenCheck && existCheck && sizeCheck) return;
         if (!lenCheck)
-            System.out.println("Usage: ./EmojiWall.jar <file_path> <grid_len>");
+            System.err.println("Usage: ./EmojiWall.jar <file_path> <grid_len>");
         if (!existCheck)
-            System.out.println("Invalid file path.");
+            System.err.println("Invalid file path.");
         if (!sizeCheck)
-            System.out.println("Invalid grid size.");
+            System.err.println("Invalid grid size.");
         System.exit(0);
     }
 
@@ -53,7 +53,7 @@ public class Main {
             try {
                 ImageIO.write(output, "png", outputFile);
             } catch (IOException e) {
-                System.out.printf("Unable to write file: %1$s\n", outputFile);
+                System.err.printf("Unable to write file: %1$s\n", outputFile);
             }
         }
     }
